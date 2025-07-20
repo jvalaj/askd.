@@ -53,8 +53,8 @@ export default function Home() {
 
       {/* Hero Section */}
       <div className="flex-1 flex flex-col justify-center items-center text-center py-16 px-6 bg-gradient-to-br from-gray-100 to-gray-50">
-        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6">
-          Everyone’s talking to AI.
+        <h1 className="text-5xl md:text-6xl font-extrabold mb-6">
+          Everyone’s talking to AI
         </h1>
         <h2 className="text-2xl md:text-3xl font-medium text-gray-700 mb-8">
           Aren’t you curious?
@@ -64,7 +64,7 @@ export default function Home() {
             onClick={() => setShowPostForm(true)}
             className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg font-medium rounded-lg shadow-md transition-transform transform hover:scale-105"
           >
-            Post one today
+            Post your chat
           </button>
           <Link
             to="/chats"

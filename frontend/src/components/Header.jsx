@@ -6,7 +6,7 @@ export default function Header({ onPostClick }) {
     <header className="sticky top-0 z-50 backdrop-blur bg-white border-b">
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
         <Link to="/" className="text-xl font-semibold text-gray-900 hover:opacity-80">
-          chats
+          Askd.
         </Link>
         <button
           onClick={onPostClick}
