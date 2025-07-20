@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-export default function Home() {
+export default function AllChats() {
   const [chats, setChats] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [showPostForm, setShowPostForm] = useState(false);
   const [formData, setFormData] = useState({ title: '', link: '' });
   const [loading, setLoading] = useState(false);
@@ -46,68 +47,61 @@ export default function Home() {
     }
   };
 
-  const latestChats = chats.slice(0, 5);
+  const filtered = chats.filter((c) => {
+    const text = c.content?.map((m) => m.message).join(' ') + ' ' + c.link;
+    return text.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   return (
-    <div className="min-h-screen w-full flex flex-col bg-white text-gray-900">
+    <div className="min-h-screen w-full bg-white text-gray-900 flex flex-col items-center">
+      {/* Page Title */}
+      <div className="px-6 py-8 border-b w-full bg-gray-50 text-center">
+        <h2 className="text-3xl font-bold tracking-tight mb-2">All Chats</h2>
+        <p className="text-base text-gray-600">Browse and search through all shared AI conversations</p>
+      </div>
 
-      {/* Hero Section */}
-      <div className="flex-1 flex flex-col justify-center items-center text-center py-16 px-6 bg-gradient-to-br from-gray-100 to-gray-50">
-        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6">
-          Everyone’s talking to AI.
-        </h1>
-        <h2 className="text-2xl md:text-3xl font-medium text-gray-700 mb-8">
-          Aren’t you curious?
-        </h2>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <button
-            onClick={() => setShowPostForm(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg font-medium rounded-lg shadow-md transition-transform transform hover:scale-105"
-          >
-            Post one today
-          </button>
-          <Link
-            to="/chats"
-            className="bg-gray-900 hover:bg-black text-white px-8 py-3 text-lg font-medium rounded-lg shadow-md transition-transform transform hover:scale-105"
-          >
-            View All Chats
-          </Link>
+      {/* Search */}
+      <div className="px-6 py-6 border-b bg-white w-full max-w-4xl">
+        <div className="max-w-lg mx-auto">
+          <input
+            type="text"
+            placeholder="Search chats..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-300 focus:outline-none text-sm"
+          />
         </div>
       </div>
 
-      {/* Latest Chats Preview */}
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        <div className="flex justify-between items-center mb-8">
-          <h3 className="text-2xl font-semibold">Latest Chats</h3>
-          <Link to="/chats" className="text-blue-600 hover:text-blue-700 font-medium">
-            View all →
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {latestChats.length > 0 ? (
-            latestChats.map((chat) => (
+      {/* Chat grid */}
+      <div className="px-6 py-8 min-h-[50vh] w-full max-w-6xl">
+        {filtered.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">
+              {searchTerm ? 'No chats match your search.' : 'No chats found.'}
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-center">
+            {filtered.map((chat) => (
               <Link
                 key={chat._id}
                 to={`/chat/${chat.slug}`}
                 className="border border-gray-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow"
               >
-                <div className="mb-2">
-                  <h4 className="font-medium text-gray-800 truncate">
-                    {chat.content?.[0]?.message.slice(0, 50) || 'View Chat'}
-                  </h4>
+                <div className="mb-3">
+                  <h3 className="font-medium text-gray-800 text-sm leading-snug truncate">
+                    {chat.content?.[0]?.message.slice(0, 80) + (chat.content?.[0]?.message.length > 80 ? '...' : '') || 'View Chat'}
+                  </h3>
                 </div>
-                <div className="flex justify-between items-center text-sm text-gray-500">
-                  <span>#{chat.slug}</span>
+                <div className="flex justify-between items-center text-xs text-gray-500">
+                  <span className="font-mono">#{chat.slug}</span>
                   <span>{new Date(chat.createdAt).toLocaleDateString()}</span>
                 </div>
               </Link>
-            ))
-          ) : (
-            <div className="text-center py-8">
-              <p className="text-gray-500">No chats yet. Be the first to share!</p>
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Post form modal */}
