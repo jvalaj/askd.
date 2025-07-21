@@ -1,19 +1,33 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import { Link, useParams, useNavigate } from 'react-router-dom'
+import { useAuth } from '@clerk/clerk-react'
+import ChatCard from '../components/ChatCard'
 
 export default function ChatDetail() {
   const { slug } = useParams()
+  const navigate = useNavigate();
+  const { getToken } = useAuth()
   const [chat, setChat] = useState(null)
   const [showScrollTop, setShowScrollTop] = useState(false)
 
   useEffect(() => {
-    fetch(`/api/chats/${slug}`)
-      .then(res => res.json())
-      .then(setChat)
-      .catch(console.error)
-  }, [slug])
+    const fetchChat = async () => {
+      try {
+        const token = await getToken() // Get auth token
+        const res = await fetch(`/api/chats/${slug}`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Add auth header
+          }
+        })
+        const data = await res.json()
+        setChat(data)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    
+    fetchChat()
+  }, [slug, getToken])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,11 +42,29 @@ export default function ChatDetail() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  if (!chat) return <div className="p-6">Loading...</div>
+  if (!chat) {
+    return (
+      <div className="min-h-screen w-full bg-white text-gray-900 flex flex-col items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-500 text-lg">Loading your chats...</p>
+        </div>
+      </div>
+    );
+  }
+
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-
+    <div className="flex-grow mx-auto max-w-6xl bg-white flex flex-col">
+    
+  {/* Back button */}
+      <div className="p-4 mt-10 flex rounded-full justify-between align-middle bg-gray-100">
+        <button onClick={() => navigate(-1)} className="text-gray-600 hover:text-gray-800 text-sm font-medium">
+          &larr; Back
+        </button>
+        <div className="text-gray-500 text-sm">
+          {chat.service} 
+        </div>
+      </div>
       {/* Chat Container */}
       <div className="flex-1 flex justify-center">
         <div className="w-full max-w-3xl">
@@ -50,7 +82,7 @@ export default function ChatDetail() {
                     ? 'bg-gray-200 text-gray-900' 
                     : 'bg-gray-50 text-gray-900'
                 }`}>
-                  <div className="whitespace-pre-wrap break-words leading-relaxed">
+                  <div className="whitespace-pre-wrap text-sm break-words ">
                     {msg.message}
                   </div>
                 </div>

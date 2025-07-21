@@ -2,16 +2,22 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
-
-const chatsRouter = require('./routes/chats');
+const authMiddleware = require('./middlewares/auth');
+const chatsRouter = require('./routes/chatRoutes');
 
 dotenv.config();
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/chats', chatsRouter);
+
+app.get('/', (req, res) => {
+  res.send('🌟 Welcome to chats.com API — home page');
+});
+
+app.use('/api/chats', authMiddleware, chatsRouter);
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
