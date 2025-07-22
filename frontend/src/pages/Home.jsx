@@ -92,7 +92,7 @@ export default function Home() {
           onClick={handleViewAllChatsClick}
           className="bg-gray-900 hover:bg-black text-white px-6 py-2 text-base font-medium rounded-full shadow-md transition-transform transform hover:scale-105"
         >
-          View 1.5K+ Conversations
+          View Conversations
         </button>
       </div>
       {showPostForm && (
