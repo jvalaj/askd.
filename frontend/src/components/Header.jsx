@@ -113,7 +113,7 @@ export default function Header({ children }) {
                 <input
                   type="url"
                   required
-                  placeholder="Supported URLs: ChatGPT/Gemini/Claude/Grok"
+                  placeholder="Supported URLs: ChatGPT/Grok ONLY"
                   value={formData.link}
                   onChange={(e) => setFormData({ ...formData, link: e.target.value })}
                   className="w-full text-gray-800 px-4 py-2 border border-gray-300 rounded-full text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"

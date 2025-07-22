@@ -118,11 +118,14 @@ export default function Home() {
                 <input
                   type="url"
                   required
-                  placeholder="Supported URLs: ChatGPT/Gemini/Claude/Grok"
+                  placeholder="Supported URLs: ChatGPT/Grok ONLY"
                   value={formData.link}
                   onChange={(e) => setFormData({ ...formData, link: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-full text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
+                  <p className="text-xs text-gray-500 italic pt-1">
+                  (We do not support conversations with images.)
+                </p>
               </div>
               {status && (
                 <div className="text-center py-2">
