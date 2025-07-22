@@ -19,9 +19,12 @@ app.get('/', (req, res) => {
 
 app.use('/api/chats', authMiddleware, chatsRouter);
 
+const PORT = process.env.PORT || 3000;
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('✅ Connected to MongoDB');
-    app.listen(3000, () => console.log('🚀 Server running on http://localhost:3000'));
+    //app.listen(3000, () => console.log('🚀 Server running on http://localhost:3000'));
+
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
   })
-  .catch(err => console.error(err));
+  .catch(console.error);
