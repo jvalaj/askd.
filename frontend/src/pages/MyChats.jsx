@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
 import ChatCard from '../components/ChatCard';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function MyChats() {
   const { getToken } = useAuth();
   const [chats, setChats] = useState([]);
@@ -15,7 +17,7 @@ export default function MyChats() {
   const fetchMyChats = async () => {
     try {
       const token = await getToken();
-      const res = await fetch('/api/chats/my-chats', {
+      const res = await fetch(`${API_URL}/api/chats/my-chats`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -34,7 +36,7 @@ export default function MyChats() {
     if (!window.confirm('Are you sure you want to delete this chat?')) return;
     try {
       const token = await getToken();
-      const res = await fetch(`/api/chats/${slug}`, {
+      const res = await fetch(`${API_URL}/api/chats/${slug}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });

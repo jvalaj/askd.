@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth, useClerk } from '@clerk/clerk-react';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function Home() {
   const { getToken, isSignedIn } = useAuth();
   const { openSignIn } = useClerk();
@@ -40,7 +42,7 @@ export default function Home() {
     try {
       const token = await getToken();
       setStatus('Adding data to platform...');
-      const res = await fetch('/api/chats', {
+      const res = await fetch(`${API_URL}/api/chats`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

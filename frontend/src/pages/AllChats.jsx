@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
 import ChatCard from '../components/ChatCard';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function AllChats() {
   const { getToken, isSignedIn } = useAuth();
   const [chats, setChats] = useState([]);
@@ -25,7 +27,7 @@ export default function AllChats() {
       const token = await getToken();
       console.log('Token received:', token ? 'Yes' : 'No');
       
-      const res = await fetch('/api/chats/allchats', {
+      const res = await fetch(`${API_URL}/api/chats/allchats`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

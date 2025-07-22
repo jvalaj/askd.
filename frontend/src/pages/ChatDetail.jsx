@@ -3,6 +3,8 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '@clerk/clerk-react'
 import ChatCard from '../components/ChatCard'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function ChatDetail() {
   const { slug } = useParams()
   const navigate = useNavigate();
@@ -14,9 +16,9 @@ export default function ChatDetail() {
     const fetchChat = async () => {
       try {
         const token = await getToken() // Get auth token
-        const res = await fetch(`/api/chats/${slug}`, {
+        const res = await fetch(`${API_URL}/api/chats/${slug}`, {
           headers: {
-            Authorization: `Bearer ${token}` // Add auth header
+            Authorization: `Bearer ${token}`,
           }
         })
         const data = await res.json()
